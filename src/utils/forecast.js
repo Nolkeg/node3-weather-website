@@ -14,11 +14,26 @@ const forecast = (latitude,longtitude,callback)=>{
         }
         else
         {
+            const sunsetTime = timeConverter(body.daily.data[0].sunsetTime);
             callback(undefined,
                 body.daily.data[0].summary+"It is currently " + body.currently.temperature + "degrees out. there is a " +body.currently.precipProbability + "% chance of rain."
+                + " Sun will set at : " + sunsetTime
             )
         }
     })
+
+    function timeConverter(UNIX_timestamp){
+        var a = new Date(UNIX_timestamp * 1000);
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var year = a.getFullYear();
+        var month = months[a.getMonth()];
+        var date = a.getDate();
+        var hour = a.getHours();
+        var min = a.getMinutes();
+        var sec = a.getSeconds();
+        var time = hour + ':' + min + ':' + sec ;
+        return time;
+      }
 }
 
 module.exports = forecast;
