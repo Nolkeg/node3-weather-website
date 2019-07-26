@@ -17,8 +17,7 @@ const geocode = (adress,callback)=>{
             callback(undefined, {
                 location : body.features[0].place_name,
                 latitude : body.features[0].center[1],
-                longtitude : body.features[0].center[0]
-                
+                longtitude : body.features[0].center[0],
             })
         }
     })
@@ -44,8 +43,7 @@ const reverseGeocode = ({latitude,longitude},callback)=>{
             callback(undefined, {
                 location : body.features[0].place_name,
                 latitude : body.features[0].center[1],
-                longtitude : body.features[0].center[0]
-                
+                longtitude : body.features[0].center[0],
             })
         }
     })

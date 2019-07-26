@@ -51,11 +51,16 @@ app.get("/help",(req,res)=>{
 })
 
 app.get("/weather", (req,res)=>{
+
     if(!req.query.adress)
     {
         return res.send({
             error: "You must provide an adress."
         })
+    }
+
+    const inputData = {
+        adress : req.query.adress,
     }
 
     geocode(req.query.adress, (error,{location,latitude,longtitude}={})=> {
@@ -67,7 +72,7 @@ app.get("/weather", (req,res)=>{
             });
         }
     
-        forecast(latitude,longtitude, (error,fData)=>{
+        forecast(latitude,longtitude,req.query.timezone, (error,fData)=>{
     
             if(error)
             {
@@ -93,10 +98,9 @@ app.get("/weather/forecast",(req,res)=>{
             error: "You must provide an adress."
         })
     }
-
     const locationdata = {
         latitude : req.query.latitude,
-        longitude : req.query.longitude
+        longitude : req.query.longitude,
     }
     reverseGeocode(locationdata, (error,{location,latitude,longtitude}={})=> {
 
@@ -107,7 +111,7 @@ app.get("/weather/forecast",(req,res)=>{
             });
         }
     
-        forecast(latitude,longtitude, (error,fData)=>{
+        forecast(latitude,longtitude, req.query.timezone,(error,fData)=>{
     
             if(error)
             {
@@ -119,7 +123,7 @@ app.get("/weather/forecast",(req,res)=>{
             res.send({
                 adress : req.query.adress,
                 location : location,
-                forecast : fData
+                forecast : fData,
             })
         })
     })

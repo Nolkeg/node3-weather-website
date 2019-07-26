@@ -8,12 +8,12 @@ forecastButton.addEventListener("click",()=>{
 
     messageOne.textContent = "Loading...";
     messageTwo.textContent = "";
-
+    var offset = new Date().getTimezoneOffset();
     if(!navigator.geolocation)
         return alert("Geoloccation is not supported by your browser");
 
     navigator.geolocation.getCurrentPosition((pos)=>{
-        fetch("/weather/forecast?latitude="+encodeURIComponent(pos.coords.latitude)+"&longitude="+encodeURIComponent(pos.coords.longitude))
+        fetch("/weather/forecast?latitude="+encodeURIComponent(pos.coords.latitude)+"&longitude="+encodeURIComponent(pos.coords.longitude)+"&timezone="+encodeURIComponent(offset))
         .then((response)=>{
             response.json().then((data)=>{
                 if(data.error)
@@ -34,11 +34,12 @@ weatherform.addEventListener("submit", (e)=>{
     e.preventDefault();
 
     const location = search.value;
-
+    var offset = new Date().getTimezoneOffset();
+    console.log(offset);
     messageOne.textContent = "Loading...";
     messageTwo.textContent = "";
 
-    fetch("/weather?adress="+ encodeURIComponent(location)).then((response)=>{
+    fetch("/weather?adress="+ encodeURIComponent(location)+"&timezone="+encodeURIComponent(offset)).then((response)=>{
         response.json().then((data)=>{
             if(data.error)
             {
