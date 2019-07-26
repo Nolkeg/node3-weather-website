@@ -1,4 +1,5 @@
 const request = require("request");
+const moment = require("moment");
 
 const forecast = (latitude,longtitude,callback)=>{
     const url = "https://api.darksky.net/forecast/d8ba9527d22824b23441e5fcb3361561/" + latitude + "," + longtitude +"?units=si"
@@ -14,7 +15,8 @@ const forecast = (latitude,longtitude,callback)=>{
         }
         else
         {
-            const sunsetTime = timeConverter(body.daily.data[0].sunsetTime);
+            const offset = new Date().getTimezoneOffset();
+            const sunsetTime = moment(body.daily.data[0].sunsetTime).utcOffset(offset).format("H:mm");
             callback(undefined,
                 body.daily.data[0].summary+"It is currently " + body.currently.temperature + "degrees out. there is a " +body.currently.precipProbability + "% chance of rain."
                 + " Sun will set at : " + sunsetTime
