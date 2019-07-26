@@ -1,7 +1,7 @@
 const path = require("path");
 const express = require("express");
 const hbs = require("hbs");
-const geocode = require("./utils/geocode");
+const {geocode,reverseGeocode}= require("./utils/geocode");
 const forecast = require("./utils/forecast");
 
 const app = express()
@@ -85,18 +85,57 @@ app.get("/weather", (req,res)=>{
     })
 })
 
-app.get("/products",(req,res)=>{
-    if(!req.query.adress)
+app.get("/weather/forecast",(req,res)=>{
+
+    if(!req.query.latitude||!req.query.longitude)
     {
         return res.send({
-            error: "you must provide an adress"
+            error: "You must provide an adress."
         })
     }
-    res.send({
-        adress: []
+
+    const locationdata = {
+        latitude : req.query.latitude,
+        longitude : req.query.longitude
+    }
+    reverseGeocode(locationdata, (error,{location,latitude,longtitude}={})=> {
+
+        if(error)
+        {
+            return res.send({
+                error: error
+            });
+        }
+    
+        forecast(latitude,longtitude, (error,fData)=>{
+    
+            if(error)
+            {
+                return res.send({
+                    error: error
+                });
+            }
+            
+            res.send({
+                adress : req.query.adress,
+                location : location,
+                forecast : fData
+            })
+        })
     })
+     
+})
+
+app.get("/forecast",(req,res)=>{
+    if(!req.query.location)
+    {
+        return res.send({
+            error: "No location provided"
+        })
+    }
     
 })
+
 
 app.get("/help/*",(req,res)=>{
     res.render("404",{
