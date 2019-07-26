@@ -14,11 +14,7 @@ const forecast = (latitude,longtitude,timeOffset,callback)=>{
         }
         else
         {
-            // console.log(body.daily.data[0].sunsetTime);
-            // console.log(timeOffset);
-            const sunsetTime = moment(body.daily.data[0].sunsetTime).utcOffset(timeOffset).format("HH:mm");
-            
-            
+            const sunsetTime = moment.unix(body.daily.data[0].sunsetTime).utcOffset(timeOffset).format("HH:mm");
             callback(undefined,
                 body.daily.data[0].summary+"It is currently " + body.currently.temperature + "degrees out. there is a " +body.currently.precipProbability + "% chance of rain."
                 + " Sun will set at : " + sunsetTime

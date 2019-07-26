@@ -34,7 +34,7 @@ weatherform.addEventListener("submit", (e)=>{
     e.preventDefault();
 
     const location = search.value;
-    var offset = new Date().getTimezoneOffset();
+    var offset = Intl.DateTimeFormat().resolvedOptions().timeZone;
     console.log(offset);
     messageOne.textContent = "Loading...";
     messageTwo.textContent = "";
